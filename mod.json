@@ -1,21 +1,156 @@
 {
     "geode": "5.11.0",
-    "gd": { "mac": "2.2081", "win": "2.2081" },
+    "gd": {
+        "mac": "2.2081",
+        "win": "2.2081"
+    },
     "id": "asdalion.editor-waveform",
     "name": "Editor Waveform",
     "version": "v1.0.1",
-    "developers": ["asdalion", "ConfiG"],
-    "description": "Full-song waveform directly on the level editor grid.",
+    "developers": [
+        "asdalion",
+        "ConfiG"
+    ],
+    "description": "Full-song waveform and spectrogram directly on the level editor grid.",
     "dependencies": {
-        "eclipse.eclipse-menu": { "version": ">=1.9.4", "required": false }
+        "eclipse.eclipse-menu": {
+            "version": ">=1.9.4",
+            "required": false
+        }
     },
     "settings": {
-        "enabled": { "type": "bool", "name": "Enabled", "description": "Show the full-song waveform on the editor grid.", "default": true },
-        "lock-to-camera": { "type": "bool", "name": "Lock to camera", "description": "Keep the grid waveform at a fixed height on screen when moving the camera.", "default": true },
-        "vertical-offset": { "type": "float", "name": "Vertical offset", "description": "Grid waveform position in editor units. Negative values move it below the origin.", "default": 270.0, "min": -1000000.0, "max": 1000000.0 },
-        "vertical-scale": { "type": "float", "name": "Vertical scale", "description": "Grid waveform height in editor units at full amplitude.", "default": 90.0, "min": 0.0, "max": 1000000.0 },
-        "line-width": { "type": "int", "name": "Line width (pixels)", "description": "Width of each waveform column, from 1 to 10 pixels.", "default": 4, "min": 1, "max": 10 },
-        "opacity": { "type": "int", "name": "Opacity", "description": "Waveform opacity: 0 is invisible and 255 is fully opaque.", "default": 190, "min": 0, "max": 255 }
+        "enabled": {
+            "type": "bool",
+            "name": "Show waveform",
+            "description": "Show the full-song waveform on the editor grid.",
+            "default": true
+        },
+        "lock-to-camera": {
+            "type": "bool",
+            "name": "Lock to camera",
+            "description": "Keep the waveform and spectrogram at fixed heights on screen when moving the camera.",
+            "default": true
+        },
+        "vertical-offset": {
+            "type": "float",
+            "name": "Vertical offset",
+            "description": "Grid waveform position in editor units. Negative values move it below the origin.",
+            "default": 270.0,
+            "min": -1000000.0,
+            "max": 1000000.0
+        },
+        "vertical-scale": {
+            "type": "float",
+            "name": "Vertical scale",
+            "description": "Grid waveform height in editor units at full amplitude.",
+            "default": 90.0,
+            "min": 0.0,
+            "max": 1000000.0
+        },
+        "line-width": {
+            "type": "int",
+            "name": "Line width (pixels)",
+            "description": "Width of each waveform column, from 1 to 10 pixels.",
+            "default": 4,
+            "min": 1,
+            "max": 10
+        },
+        "opacity": {
+            "type": "int",
+            "name": "Opacity",
+            "description": "Waveform opacity: 0 is invisible and 255 is fully opaque.",
+            "default": 190,
+            "min": 0,
+            "max": 255
+        },
+        "spectrogram-enabled": {
+            "type": "bool",
+            "name": "Show spectrogram",
+            "description": "Show the main song’s frequency content alongside the waveform.",
+            "default": true
+        },
+        "spectrogram-vertical-offset": {
+            "type": "float",
+            "name": "Spectrogram vertical offset",
+            "description": "Center position, using the same camera-lock behavior as the waveform offset.",
+            "default": 90.0,
+            "min": -1000000.0,
+            "max": 1000000.0
+        },
+        "spectrogram-height": {
+            "type": "float",
+            "name": "Spectrogram height",
+            "description": "Total spectrogram height in editor units.",
+            "default": 120.0,
+            "min": 0.0,
+            "max": 1000000.0
+        },
+        "spectrogram-opacity": {
+            "type": "int",
+            "name": "Spectrogram opacity",
+            "description": "0 is invisible; 255 is fully opaque.",
+            "default": 190,
+            "min": 0,
+            "max": 255
+        },
+        "spectrogram-window-size": {
+            "type": "string",
+            "name": "Spectrogram window size",
+            "description": "Larger windows show finer frequency detail; smaller windows show finer timing detail.",
+            "default": "2048",
+            "one-of": [
+                "512",
+                "1024",
+                "2048",
+                "4096",
+                "8192"
+            ]
+        },
+        "spectrogram-frequency-scale": {
+            "type": "float",
+            "name": "Spectrogram frequency scale",
+            "description": "0 = linear spacing; 10 = logarithmic spacing. Intermediate values blend the two.",
+            "default": 0.0,
+            "min": 0.0,
+            "max": 10.0
+        },
+        "spectrogram-min-frequency": {
+            "type": "float",
+            "name": "Spectrogram minimum frequency (Hz)",
+            "description": "Lower frequency border. Reversed borders are sorted automatically.",
+            "default": 50.0,
+            "min": 0.0,
+            "max": 16000.0
+        },
+        "spectrogram-max-frequency": {
+            "type": "float",
+            "name": "Spectrogram maximum frequency (Hz)",
+            "description": "Upper frequency border, limited by the song’s sample rate.",
+            "default": 8000.0,
+            "min": 0.0,
+            "max": 16000.0
+        },
+        "spectrogram-colormap": {
+            "type": "string",
+            "name": "Spectrogram colormap",
+            "description": "Colors representing spectral intensity, from quiet to loud.",
+            "default": "Magma",
+            "one-of": [
+                "Magma",
+                "Viridis",
+                "Inferno",
+                "Grayscale"
+            ]
+        }
     },
-    "tags": ["editor", "music", "offline"]
+    "tags": [
+        "editor",
+        "music",
+        "offline"
+    ],
+    "resources": {
+        "files": [
+            "resources/third-party-licenses.txt"
+        ]
+    }
 }

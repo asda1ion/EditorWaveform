@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "orbit": {
+      "command": "orbit",
+      "args": [
+        "mcp",
+        "serve",
+        "--operator",
+        "--workspace",
+        "ws_gd_editorwaveform"
+      ]
+    }
+  }
+}

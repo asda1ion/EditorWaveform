@@ -3,6 +3,7 @@
 #include <Geode/loader/Mod.hpp>
 #include <algorithm>
 #include <cmath>
+#include "spectrogram.hpp"
 
 namespace waveform {
 struct Config {
@@ -12,6 +13,15 @@ struct Config {
     float verticalScale;
     int lineWidth;
     int opacity;
+    bool spectrogramEnabled;
+    float spectrogramOffset;
+    float spectrogramHeight;
+    int spectrogramOpacity;
+    unsigned windowSize;
+    float frequencyScale;
+    float minimumFrequency;
+    float maximumFrequency;
+    Colormap colormap;
 
     static Config get() {
         auto mod = geode::Mod::get();
@@ -24,7 +34,16 @@ struct Config {
             finite(mod->getSettingValue<double>("vertical-offset"), 270.f),
             std::max(0.f, finite(mod->getSettingValue<double>("vertical-scale"), 90.f)),
             static_cast<int>(std::clamp<int64_t>(mod->getSettingValue<int64_t>("line-width"), 1, 10)),
-            static_cast<int>(std::clamp<int64_t>(mod->getSettingValue<int64_t>("opacity"), 0, 255))
+            static_cast<int>(std::clamp<int64_t>(mod->getSettingValue<int64_t>("opacity"), 0, 255)),
+            mod->getSettingValue<bool>("spectrogram-enabled"),
+            finite(mod->getSettingValue<double>("spectrogram-vertical-offset"), 90.f),
+            std::max(0.f, finite(mod->getSettingValue<double>("spectrogram-height"), 120.f)),
+            static_cast<int>(std::clamp<int64_t>(mod->getSettingValue<int64_t>("spectrogram-opacity"), 0, 255)),
+            windowSizeFromSetting(mod->getSettingValue<std::string>("spectrogram-window-size")),
+            std::clamp(finite(mod->getSettingValue<double>("spectrogram-frequency-scale"), 0.f), 0.f, 10.f),
+            std::clamp(finite(mod->getSettingValue<double>("spectrogram-min-frequency"), 50.f), 0.f, 16000.f),
+            std::clamp(finite(mod->getSettingValue<double>("spectrogram-max-frequency"), 8000.f), 0.f, 16000.f),
+            colormapFromSetting(mod->getSettingValue<std::string>("spectrogram-colormap"))
         };
     }
 };

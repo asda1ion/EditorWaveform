@@ -11,6 +11,7 @@
 #include <span>
 #include <string>
 #include <vector>
+#include "spectrogram.hpp"
 
 namespace FMOD { class System; }
 
@@ -97,10 +98,17 @@ struct SourceAudio {
     double sampleRate = 0;
     uint64_t frames = 0;
     std::string error;
+    std::string spectralError;
+    std::shared_ptr<Spectrogram const> spectrogram;
     double duration() const { return sampleRate > 0 ? frames / sampleRate : 0; }
 };
 
-SourceAudio decodeAudio(FMOD::System* system, std::string const& path, std::atomic<bool> const& cancelled);
+struct AnalysisOptions {
+    unsigned windowSize = 0; // zero skips all spectral analysis
+    bool buildWaveform = true;
+};
+SourceAudio decodeAudio(FMOD::System* system, std::string const& path, std::atomic<bool> const& cancelled,
+    AnalysisOptions options = {});
 
 class SourceLoader {
     struct Impl;
@@ -108,9 +116,10 @@ class SourceLoader {
 public:
     SourceLoader();
     ~SourceLoader();
-    void load(FMOD::System* system, std::string path);
+    void load(FMOD::System* system, std::string path, unsigned windowSize = 0, bool preserveWaveform = false);
     void cancel();
     std::shared_ptr<SourceAudio const> audio() const;
+    std::shared_ptr<Spectrogram const> spectrogram() const;
 };
 
 }

@@ -1,10 +1,12 @@
 # Editor Waveform
 
-Shows the main song's waveform on the editor grid and during music playback.
+Shows the main song's waveform and spectrogram on the editor grid, including
+during playtesting.
 
-Adjust position, height, line width, opacity, and camera lock in Geode settings
-or the optional Eclipse menu. Speed protals, speedhack, song offset etc changes update automatically.
+Toggle each display and adjust its appearance in Geode settings or the optional
+Eclipse menu's Settings panel. Spectrogram options include FFT window size, frequency borders,
+gradual linear/log spacing, and colormap. Song and offset changes update automatically.
 
-TODO: Song/SFX triggers and gameplay audio effects aren't shown.
+Classic levels only; Song/SFX triggers and gameplay audio effects aren't shown.
 
 Mod by asdalion. Original mod by ConfiG / cgytrus.
